@@ -54,6 +54,7 @@
   "errors": {
     "canvasError": "Unable to create canvas context",
     "imageLoadError": "Failed to load image",
-    "convertError": "Failed to convert file"
+    "convertError": "Failed to convert file",
+    "heicConversionError": "Failed to convert HEIC/HEIF file"
   }
 }

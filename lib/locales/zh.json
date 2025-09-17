@@ -54,6 +54,7 @@
   "errors": {
     "canvasError": "无法创建canvas上下文",
     "imageLoadError": "图片加载失败",
-    "convertError": "转换文件失败"
+    "convertError": "转换文件失败",
+    "heicConversionError": "HEIC/HEIF文件转换失败"
   }
 }

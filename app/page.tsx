@@ -49,7 +49,7 @@ export default function ImageConverter() {
 
     const imageFiles = Array.from(selectedFiles).filter(
       (file) => file.type.startsWith("image/") || 
-      /\.(png|jpg|jpeg|gif|bmp|tiff|tif|webp|svg)$/i.test(file.name),
+      /\.(png|jpg|jpeg|gif|bmp|tiff|tif|webp|svg|heic|heif|avif|ico|psd|raw|cr2|nef|arw|dng)$/i.test(file.name),
     )
 
     setFiles((prev) => [...prev, ...imageFiles])
@@ -96,57 +96,86 @@ export default function ImageConverter() {
   }, [])
 
   const convertImage = async (file: File, qualityValue: number, format: OutputFormat): Promise<ConvertedFile> => {
-    return new Promise((resolve, reject) => {
-      const img = new Image()
-      const canvas = document.createElement("canvas")
-      const ctx = canvas.getContext("2d")
-
-      if (!ctx) {
-        reject(new Error(t('errors.canvasError')))
-        return
-      }
-
-      img.onload = () => {
-        canvas.width = img.width
-        canvas.height = img.height
-        ctx.drawImage(img, 0, 0)
-
-        // 根据输出格式设置MIME类型
-        let mimeType: string
-        switch (format) {
-          case 'webp':
-            mimeType = "image/webp"
-            break
-          case 'png':
-            mimeType = "image/png"
-            break
-          case 'jpg':
-          case 'jpeg':
-            mimeType = "image/jpeg"
-            break
-          default:
-            mimeType = "image/webp"
+    return new Promise(async (resolve, reject) => {
+      try {
+        let processedFile = file
+        
+        // 检查是否为HEIC/HEIF格式，如果是则先转换
+        if (file.name.toLowerCase().match(/\.(heic|heif)$/i) || file.type === 'image/heic' || file.type === 'image/heif') {
+          try {
+            // 动态导入heic2any以避免服务器端渲染问题
+            const heic2any = (await import('heic2any')).default
+            const convertedBlob = await heic2any({
+              blob: file,
+              toType: 'image/jpeg',
+              quality: 1.0
+            })
+            
+            // heic2any可能返回单个Blob或Blob数组
+            const blob = Array.isArray(convertedBlob) ? convertedBlob[0] : convertedBlob
+            processedFile = new File([blob], file.name.replace(/\.(heic|heif)$/i, '.jpg'), {
+              type: 'image/jpeg'
+            })
+          } catch (heicError) {
+            console.error('HEIC conversion error:', heicError)
+            reject(new Error(t('errors.heicConversionError')))
+            return
+          }
         }
 
-        const convertedDataUrl = canvas.toDataURL(mimeType, qualityValue / 100)
+        const img = new Image()
+        const canvas = document.createElement("canvas")
+        const ctx = canvas.getContext("2d")
 
-        // 计算文件大小
-        const headerLength = `data:${mimeType};base64,`.length
-        const convertedSize = Math.round(((convertedDataUrl.length - headerLength) * 3) / 4)
-        const compressionRatio = Math.round((1 - convertedSize / file.size) * 100)
+        if (!ctx) {
+          reject(new Error(t('errors.canvasError')))
+          return
+        }
 
-        resolve({
-          originalFile: file,
-          convertedDataUrl,
-          originalSize: file.size,
-          convertedSize,
-          compressionRatio,
-          outputFormat: format,
-        })
+        img.onload = () => {
+          canvas.width = img.width
+          canvas.height = img.height
+          ctx.drawImage(img, 0, 0)
+
+          // 根据输出格式设置MIME类型
+          let mimeType: string
+          switch (format) {
+            case 'webp':
+              mimeType = "image/webp"
+              break
+            case 'png':
+              mimeType = "image/png"
+              break
+            case 'jpg':
+            case 'jpeg':
+              mimeType = "image/jpeg"
+              break
+            default:
+              mimeType = "image/webp"
+          }
+
+          const convertedDataUrl = canvas.toDataURL(mimeType, qualityValue / 100)
+
+          // 计算文件大小
+          const headerLength = `data:${mimeType};base64,`.length
+          const convertedSize = Math.round(((convertedDataUrl.length - headerLength) * 3) / 4)
+          const compressionRatio = Math.round((1 - convertedSize / file.size) * 100)
+
+          resolve({
+            originalFile: file,
+            convertedDataUrl,
+            originalSize: file.size,
+            convertedSize,
+            compressionRatio,
+            outputFormat: format,
+          })
+        }
+
+        img.onerror = () => reject(new Error(t('errors.imageLoadError')))
+        img.src = URL.createObjectURL(processedFile)
+      } catch (error) {
+        reject(error)
       }
-
-      img.onerror = () => reject(new Error(t('errors.imageLoadError')))
-      img.src = URL.createObjectURL(file)
     })
   }
 
@@ -266,7 +295,7 @@ export default function ImageConverter() {
               <input
                 ref={fileInputRef}
                 type="file"
-                accept="image/*,.png,.jpg,.jpeg,.gif,.bmp,.tiff,.tif,.webp,.svg"
+                accept="image/*,.png,.jpg,.jpeg,.gif,.bmp,.tiff,.tif,.webp,.svg,.heic,.heif,.avif,.ico,.psd,.raw,.cr2,.nef,.arw,.dng"
                 multiple
                 className="hidden"
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleFileSelect(e.target.files)}
