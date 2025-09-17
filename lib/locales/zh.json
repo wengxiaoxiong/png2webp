@@ -1,10 +1,10 @@
 {
-  "title": "PNG 转 WebP 工具",
+  "title": "图片格式转换工具",
   "description": "快速、安全的图片格式转换，完全在浏览器中处理",
   "upload": {
-    "title": "上传 PNG 图片",
+    "title": "上传图片文件",
     "description": "支持拖拽上传或点击选择文件，支持批量处理",
-    "dragText": "拖拽 PNG 文件到这里",
+    "dragText": "拖拽图片文件到这里",
     "orText": "或者点击下方按钮选择文件",
     "selectFiles": "选择文件"
   },
@@ -14,7 +14,8 @@
   },
   "settings": {
     "title": "转换设置",
-    "description": "调整 WebP 图片质量 (质量越高，文件越大)",
+    "description": "选择输出格式并调整图片质量 (质量越高，文件越大)",
+    "outputFormat": "输出格式",
     "quality": "质量"
   },
   "convert": {
@@ -38,7 +39,7 @@
     },
     "batch": {
       "title": "批量处理",
-      "description": "支持同时转换多个PNG文件"
+      "description": "支持同时转换多个图片文件"
     },
     "privacy": {
       "title": "隐私安全",
@@ -46,7 +47,7 @@
     }
   },
   "footer": {
-    "copyright": "© 2024 PNG 转 WebP 工具. 开源项目，欢迎贡献代码。",
+    "copyright": "© 2024 图片格式转换工具. 开源项目，欢迎贡献代码。",
     "github": "在 GitHub 上查看",
     "links": "友情链接:"
   },

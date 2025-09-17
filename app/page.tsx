@@ -10,23 +10,27 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Slider } from "@/components/ui/slider"
 import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
-import { Upload, Download, X, ImageIcon, FileImage, Zap, Github, Sparkles } from "lucide-react"
+import { Upload, Download, X, ImageIcon, FileImage, Zap, Github, Sparkles, ChevronDown } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { LanguageSwitcher } from "@/components/language-switcher"
 
 interface ConvertedFile {
   originalFile: File
-  webpDataUrl: string
+  convertedDataUrl: string
   originalSize: number
-  webpSize: number
+  convertedSize: number
   compressionRatio: number
+  outputFormat: string
 }
 
-export default function PngToWebpConverter() {
+type OutputFormat = 'webp' | 'png' | 'jpg' | 'jpeg'
+
+export default function ImageConverter() {
   const { t } = useTranslation()
   const [files, setFiles] = useState<File[]>([])
   const [convertedFiles, setConvertedFiles] = useState<ConvertedFile[]>([])
   const [quality, setQuality] = useState([90])
+  const [outputFormat, setOutputFormat] = useState<OutputFormat>('webp')
   const [isConverting, setIsConverting] = useState(false)
   const [progress, setProgress] = useState(0)
   const [isDragOver, setIsDragOver] = useState(false)
@@ -43,11 +47,12 @@ export default function PngToWebpConverter() {
   const handleFileSelect = useCallback((selectedFiles: FileList | null) => {
     if (!selectedFiles) return
 
-    const pngFiles = Array.from(selectedFiles).filter(
-      (file) => file.type === "image/png" || file.name.toLowerCase().endsWith(".png"),
+    const imageFiles = Array.from(selectedFiles).filter(
+      (file) => file.type.startsWith("image/") || 
+      /\.(png|jpg|jpeg|gif|bmp|tiff|tif|webp|svg)$/i.test(file.name),
     )
 
-    setFiles((prev) => [...prev, ...pngFiles])
+    setFiles((prev) => [...prev, ...imageFiles])
   }, [])
 
   const handleDrop = useCallback(
@@ -90,7 +95,7 @@ export default function PngToWebpConverter() {
     }
   }, [])
 
-  const convertToWebP = async (file: File, qualityValue: number): Promise<ConvertedFile> => {
+  const convertImage = async (file: File, qualityValue: number, format: OutputFormat): Promise<ConvertedFile> => {
     return new Promise((resolve, reject) => {
       const img = new Image()
       const canvas = document.createElement("canvas")
@@ -106,18 +111,37 @@ export default function PngToWebpConverter() {
         canvas.height = img.height
         ctx.drawImage(img, 0, 0)
 
-        const webpDataUrl = canvas.toDataURL("image/webp", qualityValue / 100)
+        // 根据输出格式设置MIME类型
+        let mimeType: string
+        switch (format) {
+          case 'webp':
+            mimeType = "image/webp"
+            break
+          case 'png':
+            mimeType = "image/png"
+            break
+          case 'jpg':
+          case 'jpeg':
+            mimeType = "image/jpeg"
+            break
+          default:
+            mimeType = "image/webp"
+        }
+
+        const convertedDataUrl = canvas.toDataURL(mimeType, qualityValue / 100)
 
         // 计算文件大小
-        const webpSize = Math.round(((webpDataUrl.length - "data:image/webp;base64,".length) * 3) / 4)
-        const compressionRatio = Math.round((1 - webpSize / file.size) * 100)
+        const headerLength = `data:${mimeType};base64,`.length
+        const convertedSize = Math.round(((convertedDataUrl.length - headerLength) * 3) / 4)
+        const compressionRatio = Math.round((1 - convertedSize / file.size) * 100)
 
         resolve({
           originalFile: file,
-          webpDataUrl,
+          convertedDataUrl,
           originalSize: file.size,
-          webpSize,
+          convertedSize,
           compressionRatio,
+          outputFormat: format,
         })
       }
 
@@ -137,7 +161,7 @@ export default function PngToWebpConverter() {
 
     for (let i = 0; i < files.length; i++) {
       try {
-        const result = await convertToWebP(files[i], quality[0])
+        const result = await convertImage(files[i], quality[0], outputFormat)
         converted.push(result)
         setProgress(((i + 1) / files.length) * 100)
       } catch (error) {
@@ -151,8 +175,14 @@ export default function PngToWebpConverter() {
 
   const downloadFile = (convertedFile: ConvertedFile) => {
     const link = document.createElement("a")
-    link.href = convertedFile.webpDataUrl
-    link.download = convertedFile.originalFile.name.replace(/\.png$/i, ".webp")
+    link.href = convertedFile.convertedDataUrl
+    
+    // 根据输出格式生成正确的文件扩展名
+    const originalName = convertedFile.originalFile.name
+    const nameWithoutExt = originalName.replace(/\.[^/.]+$/, "")
+    const newExtension = convertedFile.outputFormat === 'jpeg' ? 'jpg' : convertedFile.outputFormat
+    link.download = `${nameWithoutExt}.${newExtension}`
+    
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
@@ -236,7 +266,7 @@ export default function PngToWebpConverter() {
               <input
                 ref={fileInputRef}
                 type="file"
-                accept="image/png,.png"
+                accept="image/*,.png,.jpg,.jpeg,.gif,.bmp,.tiff,.tif,.webp,.svg"
                 multiple
                 className="hidden"
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleFileSelect(e.target.files)}
@@ -304,6 +334,25 @@ export default function PngToWebpConverter() {
             </CardHeader>
             <CardContent>
               <div className="space-y-6">
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <label className="text-lg font-semibold text-gray-900 dark:text-white">{t('settings.outputFormat')}</label>
+                    <div className="relative">
+                      <select
+                        value={outputFormat}
+                        onChange={(e) => setOutputFormat(e.target.value as OutputFormat)}
+                        className="appearance-none bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 pr-8 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                      >
+                        <option value="webp">WebP</option>
+                        <option value="png">PNG</option>
+                        <option value="jpg">JPG</option>
+                        <option value="jpeg">JPEG</option>
+                      </select>
+                      <ChevronDown className="absolute right-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500 pointer-events-none" />
+                    </div>
+                  </div>
+                </div>
+
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
                     <label className="text-lg font-semibold text-gray-900 dark:text-white">{t('settings.quality')}</label>
@@ -382,13 +431,13 @@ export default function PngToWebpConverter() {
                           <FileImage className="h-6 w-6 text-teal-600" />
                         </div>
                         <p className="font-semibold text-lg text-gray-900 dark:text-white">
-                          {file.originalFile.name.replace(/\.png$/i, ".webp")}
+                          {file.originalFile.name.replace(/\.[^/.]+$/, `.${file.outputFormat === 'jpeg' ? 'jpg' : file.outputFormat}`)}
                         </p>
                       </div>
                       <div className="flex items-center gap-6 text-sm text-gray-600 dark:text-gray-400">
                         <span className="font-medium">{t('results.original')}: {formatFileSize(file.originalSize)}</span>
                         <span className="text-teal-600 font-bold">→</span>
-                        <span className="font-medium">WebP: {formatFileSize(file.webpSize)}</span>
+                        <span className="font-medium">{file.outputFormat.toUpperCase()}: {formatFileSize(file.convertedSize)}</span>
                         <Badge 
                           variant={file.compressionRatio > 0 ? "default" : "secondary"}
                           className={file.compressionRatio > 0 ? "bg-teal-600 hover:bg-teal-700" : ""}
