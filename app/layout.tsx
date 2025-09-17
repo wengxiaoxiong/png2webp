@@ -12,6 +12,7 @@ export const metadata: Metadata = {
   creator: 'wengxiaoxiong',
   publisher: 'wengxiaoxiong',
   robots: 'index, follow',
+  viewport: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no',
   openGraph: {
     title: 'PNG to WebP Converter',
     description: 'Fast, secure PNG to WebP image format conversion',
