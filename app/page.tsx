@@ -31,6 +31,14 @@ export default function PngToWebpConverter() {
   const [progress, setProgress] = useState(0)
   const [isDragOver, setIsDragOver] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const objectUrlsRef = useRef<Set<string>>(new Set())
+
+  // Helper function to create and track object URLs
+  const createObjectURL = useCallback((file: File) => {
+    const url = URL.createObjectURL(file)
+    objectUrlsRef.current.add(url)
+    return url
+  }, [])
 
   const handleFileSelect = useCallback((selectedFiles: FileList | null) => {
     if (!selectedFiles) return
@@ -71,6 +79,16 @@ export default function PngToWebpConverter() {
   const removeFile = (index: number) => {
     setFiles((prev) => prev.filter((_, i) => i !== index))
   }
+
+  // Clean up object URLs when component unmounts
+  useEffect(() => {
+    return () => {
+      objectUrlsRef.current.forEach(url => {
+        URL.revokeObjectURL(url)
+      })
+      objectUrlsRef.current.clear()
+    }
+  }, [])
 
   const convertToWebP = async (file: File, qualityValue: number): Promise<ConvertedFile> => {
     return new Promise((resolve, reject) => {
@@ -236,11 +254,28 @@ export default function PngToWebpConverter() {
                       className="flex items-center justify-between p-4 bg-gradient-to-r from-gray-50 to-orange-50 dark:from-gray-800 dark:to-orange-900/20 rounded-xl border border-gray-200 dark:border-gray-700 hover:shadow-md transition-all duration-200"
                     >
                       <div className="flex items-center gap-4">
-                        <div className="p-2 bg-orange-100 dark:bg-orange-900/30 rounded-lg">
-                          <FileImage className="h-5 w-5 text-orange-600" />
+                        <div className="relative w-12 h-12 flex-shrink-0">
+                          <img
+                            src={createObjectURL(file)}
+                            alt={file.name}
+                            className="w-full h-full object-cover rounded-lg border border-gray-200 dark:border-gray-600"
+                            onError={(e) => {
+                              // Fallback to icon if image fails to load
+                              const target = e.target as HTMLImageElement;
+                              target.style.display = 'none';
+                              const fallback = target.nextElementSibling as HTMLElement;
+                              if (fallback) fallback.style.display = 'flex';
+                            }}
+                          />
+                          <div 
+                            className="absolute inset-0 p-2 bg-orange-100 dark:bg-orange-900/30 rounded-lg items-center justify-center hidden"
+                            style={{ display: 'none' }}
+                          >
+                            <FileImage className="h-5 w-5 text-orange-600" />
+                          </div>
                         </div>
-                        <div>
-                          <p className="font-medium text-gray-900 dark:text-white">{file.name}</p>
+                        <div className="min-w-0 flex-1">
+                          <p className="font-medium text-gray-900 dark:text-white truncate">{file.name}</p>
                           <p className="text-sm text-gray-500 dark:text-gray-400">{formatFileSize(file.size)}</p>
                         </div>
                       </div>
@@ -248,7 +283,7 @@ export default function PngToWebpConverter() {
                         size="sm" 
                         variant="ghost" 
                         onClick={() => removeFile(index)}
-                        className="hover:bg-red-100 dark:hover:bg-red-900/20 hover:text-red-600 dark:hover:text-red-400"
+                        className="hover:bg-red-100 dark:hover:bg-red-900/20 hover:text-red-600 dark:hover:text-red-400 flex-shrink-0"
                       >
                         <X className="h-4 w-4" />
                       </Button>
