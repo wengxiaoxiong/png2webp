@@ -2,9 +2,6 @@
 
 一个现代化的在线图片格式转换工具，支持将 PNG 图片快速转换为 WebP 格式，完全在浏览器中处理，保护用户隐私。
 
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/wengxiaoxiongs-projects/v0-png-to-web-p-tool)
-[![Built with Next.js](https://img.shields.io/badge/Built%20with-Next.js-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 
 ## ✨ 功能特性
 
@@ -18,7 +15,7 @@
 
 ## 🛠️ 技术栈
 
-- **前端框架**: Next.js 14
+- **前端框架**: Next.js
 - **开发语言**: TypeScript
 - **样式方案**: Tailwind CSS
 - **UI 组件**: Radix UI + shadcn/ui
@@ -29,7 +26,7 @@
 
 ### 在线使用
 
-直接访问部署的网站：[https://vercel.com/wengxiaoxiongs-projects/v0-png-to-web-p-tool](https://vercel.com/wengxiaoxiongs-projects/v0-png-to-web-p-tool)
+直接访问部署的网站：[https://www.png2webp.site/](https://www.png2webp.site/)
 
 ### 本地开发
 
