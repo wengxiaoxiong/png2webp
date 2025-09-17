@@ -17,7 +17,7 @@ export function LanguageSwitcher() {
       variant="outline"
       size="sm"
       onClick={toggleLanguage}
-      className="flex items-center gap-2"
+      className="flex items-center gap-2 min-h-[44px] text-sm sm:text-base"
     >
       <Globe className="h-4 w-4" />
       {i18n.language === 'en' ? '中文' : 'English'}
