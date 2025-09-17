@@ -45,7 +45,9 @@ export default function PngToWebpConverter() {
   const handleDrop = useCallback(
     (e: React.DragEvent) => {
       e.preventDefault()
+      e.stopPropagation()
       setIsDragOver(false)
+      console.log('Files dropped:', e.dataTransfer.files)
       handleFileSelect(e.dataTransfer.files)
     },
     [handleFileSelect],
@@ -53,12 +55,17 @@ export default function PngToWebpConverter() {
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault()
+    e.stopPropagation()
     setIsDragOver(true)
   }, [])
 
   const handleDragLeave = useCallback((e: React.DragEvent) => {
     e.preventDefault()
-    setIsDragOver(false)
+    e.stopPropagation()
+    // Only set drag over to false if we're leaving the drop zone entirely
+    if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+      setIsDragOver(false)
+    }
   }, [])
 
   const removeFile = (index: number) => {
@@ -146,20 +153,20 @@ export default function PngToWebpConverter() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-900 dark:via-gray-900 dark:to-gray-800 p-4">
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-pink-50 to-teal-50 dark:from-slate-900 dark:via-orange-950/20 dark:to-teal-950/20 p-4">
       <div className="max-w-4xl mx-auto space-y-8">
         {/* Header */}
         <div className="text-center space-y-4">
           <div className="flex items-center justify-center gap-2 mb-6">
             <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl blur-lg opacity-75"></div>
-              <div className="relative p-4 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl">
+              <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-pink-500 rounded-2xl blur-lg opacity-75"></div>
+              <div className="relative p-4 bg-gradient-to-r from-orange-500 to-pink-500 rounded-2xl">
                 <Sparkles className="h-10 w-10 text-white" />
               </div>
             </div>
           </div>
           <div className="space-y-2">
-            <h1 className="text-5xl font-bold bg-gradient-to-r from-gray-900 via-blue-900 to-purple-900 dark:from-white dark:via-blue-100 dark:to-purple-100 bg-clip-text text-transparent">
+            <h1 className="text-5xl font-bold bg-gradient-to-r from-gray-900 via-orange-800 to-pink-800 dark:from-white dark:via-orange-200 dark:to-pink-200 bg-clip-text text-transparent">
               {t('title')}
             </h1>
             <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
@@ -175,7 +182,7 @@ export default function PngToWebpConverter() {
         <Card className="border-0 shadow-xl bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-xl">
-              <Upload className="h-6 w-6 text-blue-600" />
+              <Upload className="h-6 w-6 text-orange-600" />
               {t('upload.title')}
             </CardTitle>
             <CardDescription className="text-base">{t('upload.description')}</CardDescription>
@@ -185,16 +192,17 @@ export default function PngToWebpConverter() {
               className={cn(
                 "border-2 border-dashed rounded-2xl p-12 text-center transition-all duration-300 hover:scale-[1.02]",
                 isDragOver
-                  ? "border-blue-500 bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-950/20 dark:to-purple-950/20 shadow-lg"
-                  : "border-gray-300 dark:border-gray-600 hover:border-blue-400 dark:hover:border-blue-500 hover:shadow-md",
+                  ? "border-orange-500 bg-gradient-to-br from-orange-50 to-pink-50 dark:from-orange-950/20 dark:to-pink-950/20 shadow-lg"
+                  : "border-gray-300 dark:border-gray-600 hover:border-orange-400 dark:hover:border-orange-500 hover:shadow-md",
               )}
               onDrop={handleDrop}
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
+              onDragEnter={handleDragOver}
             >
               <div className="relative mb-6">
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full blur-xl opacity-30"></div>
-                <ImageIcon className="relative h-16 w-16 text-blue-500 mx-auto" />
+                <div className="absolute inset-0 bg-gradient-to-r from-orange-400 to-pink-400 rounded-full blur-xl opacity-30"></div>
+                <ImageIcon className="relative h-16 w-16 text-orange-500 mx-auto" />
               </div>
               <p className="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-2">{t('upload.dragText')}</p>
               <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">{t('upload.orText')}</p>
@@ -202,7 +210,7 @@ export default function PngToWebpConverter() {
                 onClick={() => fileInputRef.current?.click()} 
                 variant="outline"
                 size="lg"
-                className="bg-gradient-to-r from-blue-600 to-purple-600 text-white border-0 hover:from-blue-700 hover:to-purple-700 shadow-lg hover:shadow-xl transition-all duration-300"
+                className="bg-gradient-to-r from-orange-600 to-pink-600 text-white border-0 hover:from-orange-700 hover:to-pink-700 shadow-lg hover:shadow-xl transition-all duration-300"
               >
                 <Upload className="h-5 w-5 mr-2" />
                 {t('upload.selectFiles')}
@@ -225,11 +233,11 @@ export default function PngToWebpConverter() {
                   {files.map((file, index) => (
                     <div
                       key={index}
-                      className="flex items-center justify-between p-4 bg-gradient-to-r from-gray-50 to-blue-50 dark:from-gray-800 dark:to-blue-900/20 rounded-xl border border-gray-200 dark:border-gray-700 hover:shadow-md transition-all duration-200"
+                      className="flex items-center justify-between p-4 bg-gradient-to-r from-gray-50 to-orange-50 dark:from-gray-800 dark:to-orange-900/20 rounded-xl border border-gray-200 dark:border-gray-700 hover:shadow-md transition-all duration-200"
                     >
                       <div className="flex items-center gap-4">
-                        <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
-                          <FileImage className="h-5 w-5 text-blue-600" />
+                        <div className="p-2 bg-orange-100 dark:bg-orange-900/30 rounded-lg">
+                          <FileImage className="h-5 w-5 text-orange-600" />
                         </div>
                         <div>
                           <p className="font-medium text-gray-900 dark:text-white">{file.name}</p>
@@ -264,7 +272,7 @@ export default function PngToWebpConverter() {
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
                     <label className="text-lg font-semibold text-gray-900 dark:text-white">{t('settings.quality')}</label>
-                    <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">{quality[0]}%</span>
+                    <span className="text-2xl font-bold bg-gradient-to-r from-orange-600 to-pink-600 bg-clip-text text-transparent">{quality[0]}%</span>
                   </div>
                   <Slider 
                     value={quality} 
@@ -278,7 +286,7 @@ export default function PngToWebpConverter() {
                 <Button 
                   onClick={handleConvert} 
                   disabled={isConverting} 
-                  className="w-full h-14 text-lg font-semibold bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg hover:shadow-xl transition-all duration-300"
+                  className="w-full h-14 text-lg font-semibold bg-gradient-to-r from-orange-600 to-pink-600 hover:from-orange-700 hover:to-pink-700 shadow-lg hover:shadow-xl transition-all duration-300"
                   size="lg"
                 >
                   {isConverting ? (
@@ -314,7 +322,7 @@ export default function PngToWebpConverter() {
               <div className="flex items-center justify-between">
                 <div>
                   <CardTitle className="flex items-center gap-2 text-xl">
-                    <Download className="h-6 w-6 text-green-600" />
+                    <Download className="h-6 w-6 text-teal-600" />
                     {t('results.title')}
                   </CardTitle>
                   <CardDescription className="text-base">{t('results.description')}</CardDescription>
@@ -322,7 +330,7 @@ export default function PngToWebpConverter() {
                 <Button 
                   onClick={downloadAll} 
                   variant="outline"
-                  className="bg-gradient-to-r from-green-600 to-emerald-600 text-white border-0 hover:from-green-700 hover:to-emerald-700 shadow-lg hover:shadow-xl transition-all duration-300"
+                  className="bg-gradient-to-r from-teal-600 to-cyan-600 text-white border-0 hover:from-teal-700 hover:to-cyan-700 shadow-lg hover:shadow-xl transition-all duration-300"
                 >
                   <Download className="h-4 w-4 mr-2" />
                   {t('results.downloadAll')}
@@ -332,11 +340,11 @@ export default function PngToWebpConverter() {
             <CardContent>
               <div className="space-y-4">
                 {convertedFiles.map((file, index) => (
-                  <div key={index} className="flex items-center justify-between p-6 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-xl border border-green-200 dark:border-green-700 hover:shadow-lg transition-all duration-200">
+                  <div key={index} className="flex items-center justify-between p-6 bg-gradient-to-r from-teal-50 to-cyan-50 dark:from-teal-900/20 dark:to-cyan-900/20 rounded-xl border border-teal-200 dark:border-teal-700 hover:shadow-lg transition-all duration-200">
                     <div className="flex-1">
                       <div className="flex items-center gap-4 mb-3">
-                        <div className="p-2 bg-green-100 dark:bg-green-900/30 rounded-lg">
-                          <FileImage className="h-6 w-6 text-green-600" />
+                        <div className="p-2 bg-teal-100 dark:bg-teal-900/30 rounded-lg">
+                          <FileImage className="h-6 w-6 text-teal-600" />
                         </div>
                         <p className="font-semibold text-lg text-gray-900 dark:text-white">
                           {file.originalFile.name.replace(/\.png$/i, ".webp")}
@@ -344,11 +352,11 @@ export default function PngToWebpConverter() {
                       </div>
                       <div className="flex items-center gap-6 text-sm text-gray-600 dark:text-gray-400">
                         <span className="font-medium">{t('results.original')}: {formatFileSize(file.originalSize)}</span>
-                        <span className="text-green-600 font-bold">→</span>
+                        <span className="text-teal-600 font-bold">→</span>
                         <span className="font-medium">WebP: {formatFileSize(file.webpSize)}</span>
                         <Badge 
                           variant={file.compressionRatio > 0 ? "default" : "secondary"}
-                          className={file.compressionRatio > 0 ? "bg-green-600 hover:bg-green-700" : ""}
+                          className={file.compressionRatio > 0 ? "bg-teal-600 hover:bg-teal-700" : ""}
                         >
                           {file.compressionRatio > 0 ? `${t('results.compressed')} ${file.compressionRatio}%` : t('results.noCompression')}
                         </Badge>
@@ -357,7 +365,7 @@ export default function PngToWebpConverter() {
                     <Button 
                       onClick={() => downloadFile(file)} 
                       size="sm"
-                      className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 shadow-lg hover:shadow-xl transition-all duration-300"
+                      className="bg-gradient-to-r from-teal-600 to-cyan-600 hover:from-teal-700 hover:to-cyan-700 shadow-lg hover:shadow-xl transition-all duration-300"
                     >
                       <Download className="h-4 w-4 mr-2" />
                       {t('results.download')}
@@ -375,8 +383,8 @@ export default function PngToWebpConverter() {
             <div className="grid md:grid-cols-3 gap-8 text-center">
               <div className="space-y-4 group">
                 <div className="relative mx-auto w-fit">
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-blue-600 rounded-2xl blur-lg opacity-30 group-hover:opacity-50 transition-opacity"></div>
-                  <div className="relative p-4 bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl">
+                  <div className="absolute inset-0 bg-gradient-to-r from-orange-400 to-orange-600 rounded-2xl blur-lg opacity-30 group-hover:opacity-50 transition-opacity"></div>
+                  <div className="relative p-4 bg-gradient-to-r from-orange-500 to-orange-600 rounded-2xl">
                     <Zap className="h-8 w-8 text-white" />
                   </div>
                 </div>
@@ -385,8 +393,8 @@ export default function PngToWebpConverter() {
               </div>
               <div className="space-y-4 group">
                 <div className="relative mx-auto w-fit">
-                  <div className="absolute inset-0 bg-gradient-to-r from-green-400 to-green-600 rounded-2xl blur-lg opacity-30 group-hover:opacity-50 transition-opacity"></div>
-                  <div className="relative p-4 bg-gradient-to-r from-green-500 to-green-600 rounded-2xl">
+                  <div className="absolute inset-0 bg-gradient-to-r from-pink-400 to-pink-600 rounded-2xl blur-lg opacity-30 group-hover:opacity-50 transition-opacity"></div>
+                  <div className="relative p-4 bg-gradient-to-r from-pink-500 to-pink-600 rounded-2xl">
                     <FileImage className="h-8 w-8 text-white" />
                   </div>
                 </div>
@@ -395,8 +403,8 @@ export default function PngToWebpConverter() {
               </div>
               <div className="space-y-4 group">
                 <div className="relative mx-auto w-fit">
-                  <div className="absolute inset-0 bg-gradient-to-r from-purple-400 to-purple-600 rounded-2xl blur-lg opacity-30 group-hover:opacity-50 transition-opacity"></div>
-                  <div className="relative p-4 bg-gradient-to-r from-purple-500 to-purple-600 rounded-2xl">
+                  <div className="absolute inset-0 bg-gradient-to-r from-teal-400 to-teal-600 rounded-2xl blur-lg opacity-30 group-hover:opacity-50 transition-opacity"></div>
+                  <div className="relative p-4 bg-gradient-to-r from-teal-500 to-teal-600 rounded-2xl">
                     <Download className="h-8 w-8 text-white" />
                   </div>
                 </div>
@@ -430,7 +438,7 @@ export default function PngToWebpConverter() {
                 href="https://wengxiaoxiong.com" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 transition-colors hover:underline"
+                className="text-sm text-orange-600 hover:text-orange-800 dark:text-orange-400 dark:hover:text-orange-300 transition-colors hover:underline"
               >
                 wengxiaoxiong.com
               </a>
@@ -439,7 +447,7 @@ export default function PngToWebpConverter() {
                 href="https://bear-agent.com" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 transition-colors hover:underline"
+                className="text-sm text-orange-600 hover:text-orange-800 dark:text-orange-400 dark:hover:text-orange-300 transition-colors hover:underline"
               >
                 bear-agent.com
               </a>
