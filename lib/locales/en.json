@@ -1,10 +1,10 @@
 {
-  "title": "PNG to WebP Converter",
+  "title": "Image Format Converter",
   "description": "Fast, secure image format conversion, completely processed in your browser",
   "upload": {
-    "title": "Upload PNG Images",
+    "title": "Upload Image Files",
     "description": "Support drag and drop or click to select files, batch processing supported",
-    "dragText": "Drag PNG files here",
+    "dragText": "Drag image files here",
     "orText": "or click the button below to select files",
     "selectFiles": "Select Files"
   },
@@ -14,7 +14,8 @@
   },
   "settings": {
     "title": "Conversion Settings",
-    "description": "Adjust WebP image quality (higher quality = larger file size)",
+    "description": "Choose output format and adjust image quality (higher quality = larger file size)",
+    "outputFormat": "Output Format",
     "quality": "Quality"
   },
   "convert": {
@@ -38,7 +39,7 @@
     },
     "batch": {
       "title": "Batch Processing",
-      "description": "Support converting multiple PNG files simultaneously"
+      "description": "Support converting multiple image files simultaneously"
     },
     "privacy": {
       "title": "Privacy & Security",
@@ -46,7 +47,7 @@
     }
   },
   "footer": {
-    "copyright": "© 2024 PNG to WebP Converter. Open source project, contributions welcome.",
+    "copyright": "© 2024 Image Format Converter. Open source project, contributions welcome.",
     "github": "View on GitHub",
     "links": "Friendship Links:"
   },
