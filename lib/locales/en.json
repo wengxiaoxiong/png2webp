@@ -1,0 +1,58 @@
+{
+  "title": "PNG to WebP Converter",
+  "description": "Fast, secure image format conversion, completely processed in your browser",
+  "upload": {
+    "title": "Upload PNG Images",
+    "description": "Support drag and drop or click to select files, batch processing supported",
+    "dragText": "Drag PNG files here",
+    "orText": "or click the button below to select files",
+    "selectFiles": "Select Files"
+  },
+  "files": {
+    "selected": "Selected Files",
+    "remove": "Remove"
+  },
+  "settings": {
+    "title": "Conversion Settings",
+    "description": "Adjust WebP image quality (higher quality = larger file size)",
+    "quality": "Quality"
+  },
+  "convert": {
+    "start": "Start Conversion",
+    "converting": "Converting...",
+    "progress": "Complete"
+  },
+  "results": {
+    "title": "Conversion Results",
+    "description": "Conversion complete! Click to download individual files or batch download",
+    "downloadAll": "Download All",
+    "download": "Download",
+    "original": "Original",
+    "compressed": "Compressed",
+    "noCompression": "No Compression"
+  },
+  "features": {
+    "fast": {
+      "title": "Fast Conversion",
+      "description": "Pure frontend processing, no need to upload to server"
+    },
+    "batch": {
+      "title": "Batch Processing",
+      "description": "Support converting multiple PNG files simultaneously"
+    },
+    "privacy": {
+      "title": "Privacy & Security",
+      "description": "All processing is done locally to protect your privacy"
+    }
+  },
+  "footer": {
+    "copyright": "© 2024 PNG to WebP Converter. Open source project, contributions welcome.",
+    "github": "View on GitHub",
+    "links": "Friendship Links:"
+  },
+  "errors": {
+    "canvasError": "Unable to create canvas context",
+    "imageLoadError": "Failed to load image",
+    "convertError": "Failed to convert file"
+  }
+}

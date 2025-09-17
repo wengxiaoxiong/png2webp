@@ -1,0 +1,58 @@
+{
+  "title": "PNG 转 WebP 工具",
+  "description": "快速、安全的图片格式转换，完全在浏览器中处理",
+  "upload": {
+    "title": "上传 PNG 图片",
+    "description": "支持拖拽上传或点击选择文件，支持批量处理",
+    "dragText": "拖拽 PNG 文件到这里",
+    "orText": "或者点击下方按钮选择文件",
+    "selectFiles": "选择文件"
+  },
+  "files": {
+    "selected": "已选择的文件",
+    "remove": "移除"
+  },
+  "settings": {
+    "title": "转换设置",
+    "description": "调整 WebP 图片质量 (质量越高，文件越大)",
+    "quality": "质量"
+  },
+  "convert": {
+    "start": "开始转换",
+    "converting": "转换中...",
+    "progress": "完成"
+  },
+  "results": {
+    "title": "转换结果",
+    "description": "转换完成！点击下载单个文件或批量下载",
+    "downloadAll": "下载全部",
+    "download": "下载",
+    "original": "原始",
+    "compressed": "压缩",
+    "noCompression": "无压缩"
+  },
+  "features": {
+    "fast": {
+      "title": "快速转换",
+      "description": "纯前端处理，无需上传到服务器"
+    },
+    "batch": {
+      "title": "批量处理",
+      "description": "支持同时转换多个PNG文件"
+    },
+    "privacy": {
+      "title": "隐私安全",
+      "description": "所有处理都在本地完成，保护您的隐私"
+    }
+  },
+  "footer": {
+    "copyright": "© 2024 PNG 转 WebP 工具. 开源项目，欢迎贡献代码。",
+    "github": "在 GitHub 上查看",
+    "links": "友情链接:"
+  },
+  "errors": {
+    "canvasError": "无法创建canvas上下文",
+    "imageLoadError": "图片加载失败",
+    "convertError": "转换文件失败"
+  }
+}
