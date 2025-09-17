@@ -340,6 +340,35 @@ export default function PngToWebpConverter() {
             </div>
           </CardContent>
         </Card>
+
+        {/* Footer with Friendship Links */}
+        <footer className="text-center py-8 border-t border-gray-200 dark:border-gray-700">
+          <div className="space-y-4">
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              © 2024 PNG 转 WebP 工具. 开源项目，欢迎贡献代码。
+            </p>
+            <div className="flex justify-center items-center gap-6">
+              <span className="text-sm text-gray-500 dark:text-gray-400">友情链接:</span>
+              <a 
+                href="https://wengxiaoxiong.com" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 transition-colors"
+              >
+                wengxiaoxiong.com
+              </a>
+              <span className="text-gray-400">|</span>
+              <a 
+                href="https://bear-agent.com" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 transition-colors"
+              >
+                bear-agent.com
+              </a>
+            </div>
+          </div>
+        </footer>
       </div>
     </div>
   )
