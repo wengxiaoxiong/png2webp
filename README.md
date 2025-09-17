@@ -7,9 +7,9 @@
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=for-the-badge&logo=typescript)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-3-38B2AC?style=for-the-badge&logo=tailwind-css)
 
-A modern online image format conversion tool that supports fast conversion of PNG images to WebP format, completely processed in the browser to protect user privacy.
+A modern online image format conversion tool that supports fast conversion of various image formats (including PNG, HEIC, AVIF, and more) to WebP format, completely processed in the browser to protect user privacy.
 
-一个现代化的在线图片格式转换工具，支持将 PNG 图片快速转换为 WebP 格式，完全在浏览器中处理，保护用户隐私。
+一个现代化的在线图片格式转换工具，支持将多种图片格式（包括 PNG、HEIC、AVIF 等）快速转换为 WebP 格式，完全在浏览器中处理，保护用户隐私。
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-Visit%20Site-green?style=for-the-badge)](https://www.png2webp.site/)
 [![GitHub](https://img.shields.io/badge/GitHub-View%20Source-black?style=for-the-badge&logo=github)](https://github.com/wengxiaoxiong/png2webp)
@@ -22,23 +22,25 @@ A modern online image format conversion tool that supports fast conversion of PN
 
 ### English
 - **🚀 Fast Conversion**: Pure frontend processing, no server upload required, fast conversion speed
-- **📁 Batch Processing**: Support converting multiple PNG files simultaneously, improving work efficiency
+- **📁 Batch Processing**: Support converting multiple image files simultaneously, improving work efficiency
 - **🎛️ Quality Control**: Customizable WebP image quality (10%-100%), balancing file size and image quality
 - **🔒 Privacy & Security**: All processing is done locally in the browser, no files uploaded to server
 - **📱 Responsive Design**: Support desktop and mobile, providing excellent user experience
 - **🌙 Dark Mode**: Support light/dark theme switching, adapting to different usage environments
 - **📊 Compression Stats**: Real-time display of file size comparison and compression ratio
 - **🌍 Internationalization**: Support for English and Chinese languages
+- **📸 Multiple Formats**: Support for PNG, JPG, GIF, BMP, TIFF, WebP, SVG, HEIC, HEIF, AVIF, ICO, PSD, and RAW formats
 
 ### 中文
 - **🚀 快速转换**: 纯前端处理，无需上传到服务器，转换速度快
-- **📁 批量处理**: 支持同时转换多个 PNG 文件，提高工作效率
+- **📁 批量处理**: 支持同时转换多个图片文件，提高工作效率
 - **🎛️ 质量调节**: 可自定义 WebP 图片质量 (10%-100%)，平衡文件大小和图片质量
 - **🔒 隐私安全**: 所有处理都在本地浏览器中完成，不会上传任何文件到服务器
 - **📱 响应式设计**: 支持桌面端和移动端，提供良好的用户体验
 - **🌙 深色模式**: 支持明暗主题切换，适应不同使用环境
 - **📊 压缩统计**: 实时显示文件大小对比和压缩比例
 - **🌍 国际化**: 支持英文和中文语言
+- **📸 多格式支持**: 支持 PNG、JPG、GIF、BMP、TIFF、WebP、SVG、HEIC、HEIF、AVIF、ICO、PSD 和 RAW 格式
 
 ---
 
@@ -51,6 +53,7 @@ A modern online image format conversion tool that supports fast conversion of PN
 | **Styling / 样式方案** | Tailwind CSS 3 |
 | **UI Components / UI 组件** | Radix UI + shadcn/ui |
 | **Icons / 图标库** | Lucide React |
+| **HEIC Support / HEIC 支持** | heic2any |
 | **Deployment / 部署平台** | Vercel |
 | **Internationalization / 国际化** | react-i18next |
 
@@ -107,13 +110,13 @@ A modern online image format conversion tool that supports fast conversion of PN
 ## 📖 Usage Instructions / 使用说明
 
 ### English
-1. **Upload Images**: Drag PNG files to the upload area, or click the button to select files
+1. **Upload Images**: Drag image files (PNG, JPG, HEIC, AVIF, etc.) to the upload area, or click the button to select files
 2. **Adjust Quality**: Use the slider to adjust WebP image quality (recommended 80-90%)
 3. **Start Conversion**: Click the "Start Conversion" button and wait for processing to complete
 4. **Download Results**: Download individual files or batch download all converted files
 
 ### 中文
-1. **上传图片**: 拖拽 PNG 文件到上传区域，或点击按钮选择文件
+1. **上传图片**: 拖拽图片文件（PNG、JPG、HEIC、AVIF 等）到上传区域，或点击按钮选择文件
 2. **调整质量**: 使用滑块调整 WebP 图片质量 (推荐 80-90%)
 3. **开始转换**: 点击"开始转换"按钮，等待处理完成
 4. **下载结果**: 可以单独下载每个文件，或批量下载所有转换后的文件
@@ -164,6 +167,7 @@ png2webp/
 
 **English**:
 - **Image Conversion**: Uses HTML5 Canvas API for format conversion
+- **HEIC Support**: Uses heic2any library for HEIC/HEIF format conversion
 - **File Processing**: Supports drag-and-drop upload and batch processing
 - **Quality Control**: Adjustable WebP compression quality
 - **Progress Display**: Real-time conversion progress display
@@ -171,6 +175,7 @@ png2webp/
 
 **中文**:
 - **图片转换**: 使用 HTML5 Canvas API 进行格式转换
+- **HEIC 支持**: 使用 heic2any 库进行 HEIC/HEIF 格式转换
 - **文件处理**: 支持拖拽上传和批量处理
 - **质量控制**: 可调节的 WebP 压缩质量
 - **进度显示**: 实时显示转换进度
