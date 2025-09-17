@@ -5,23 +5,23 @@ import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'PNG 转 WebP 工具 - 在线图片格式转换',
-  description: '快速、安全地将 PNG 图片转换为 WebP 格式。支持批量处理、质量调节，完全在浏览器中处理，保护您的隐私。',
-  keywords: 'PNG, WebP, 图片转换, 格式转换, 在线工具, 批量处理, 图片压缩',
+  title: 'PNG to WebP Converter - Online Image Format Conversion',
+  description: 'Fast, secure PNG to WebP image format conversion. Support batch processing, quality adjustment, completely processed in browser, protecting your privacy.',
+  keywords: 'PNG, WebP, image conversion, format conversion, online tool, batch processing, image compression',
   authors: [{ name: 'wengxiaoxiong' }],
   creator: 'wengxiaoxiong',
   publisher: 'wengxiaoxiong',
   robots: 'index, follow',
   openGraph: {
-    title: 'PNG 转 WebP 工具',
-    description: '快速、安全地将 PNG 图片转换为 WebP 格式',
+    title: 'PNG to WebP Converter',
+    description: 'Fast, secure PNG to WebP image format conversion',
     type: 'website',
-    locale: 'zh_CN',
+    locale: 'en_US',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'PNG 转 WebP 工具',
-    description: '快速、安全地将 PNG 图片转换为 WebP 格式',
+    title: 'PNG to WebP Converter',
+    description: 'Fast, secure PNG to WebP image format conversion',
   },
 }
 
